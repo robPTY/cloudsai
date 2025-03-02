@@ -3,10 +3,6 @@ import BodyCard from "./components/BodyCard";
 import "./App.css";
 
 function App() {
-  const [image, setImage] = useState<string | null>(null);
-  const [result, setResult] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<string | null>(null);
-
   return (
     <div className="App">
       <div className="appContent">
