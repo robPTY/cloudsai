@@ -1,24 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import BodyCard from "./components/BodyCard";
+import "./App.css";
 
 function App() {
+  const [image, setImage] = useState<string | null>(null);
+  const [result, setResult] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<string | null>(null);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="appContent">
+        <div className="appHeader">
+          <h1>Clouds.AI</h1>
+          <h3>Identify any cloud, with just a photo!</h3>
+        </div>
+        <BodyCard />
+      </div>
     </div>
   );
 }
