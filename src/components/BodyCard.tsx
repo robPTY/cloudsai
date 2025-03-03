@@ -16,10 +16,30 @@ const BodyCard = () => {
   const streamRef = useRef<MediaStream | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const identifyCloud = () => {
+  const identifyCloud = async () => {
     if (!image) return;
 
     setIsLoading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("image", image);
+      const response = await fetch("http://localhost:5000/api/identify-cloud", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (data.choices && data.choices.length > 0) {
+        setResult(data.choices[0].text);
+      } else {
+        setResult("No response from API");
+      }
+    } catch (error) {
+      console.error("Error calling backend:", error);
+      setResult("Error occurred");
+    }
+    setIsLoading(false);
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,6 +131,12 @@ const BodyCard = () => {
                 )}
               </button>
             </div>
+          </div>
+        )}
+        {result && (
+          <div className="resultDiv">
+            <h3>Cloud Result:</h3>
+            <p>{result}</p>
           </div>
         )}
       </div>

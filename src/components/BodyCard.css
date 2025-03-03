@@ -146,6 +146,23 @@
   animation: spin 1s linear infinite;
 }
 
+.resultDiv {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #e0f2fe;
+  border-radius: 0.5rem;
+}
+
+.resultDiv h3 {
+  font-weight: 500;
+  color: #0c4a6e;
+  margin-bottom: 0.25rem;
+}
+
+.resultDiv p {
+  color: #075985;
+}
+
 @keyframes spin {
   from {
     transform: rotate(0deg);
