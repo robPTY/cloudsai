@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
 import CameraSVG from "../assets/svgs/camera.svg";
+import SpinnerSVG from "../assets/svgs/spinner.svg";
+import RightArrowSVG from "../assets/svgs/right_arrow.svg";
 import CloudSVG from "../assets/svgs/cloud.svg";
 import UploadSVG from "../assets/svgs/upload.svg";
 import "./BodyCard.css";
@@ -8,11 +10,17 @@ const BodyCard = () => {
   const [image, setImage] = useState<string | null>(null);
   const [result, setResult] = useState<string | null>(null);
   const [cameraActive, setCameraActive] = useState(false);
-  const [isLoading, setIsLoading] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const identifyCloud = () => {
+    if (!image) return;
+
+    setIsLoading(true);
+  };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const uploaded_file = e.target.files?.[0];
@@ -45,6 +53,13 @@ const BodyCard = () => {
 
   return (
     <div className="cardBody">
+      <input
+        type="file"
+        ref={fileInputRef}
+        className="hiddenInput"
+        onChange={handleFileUpload}
+        accept="image/*"
+      />
       <div className="cardHeader">
         <h2 className="cardHeaderText">Roberto's Cloud Identifier</h2>
         <p>Take a photo or upload an image of a cloud to identify it</p>
@@ -72,13 +87,29 @@ const BodyCard = () => {
         {image && !cameraActive && (
           <div className="imageContainerBody">
             <div className="imageContainer">
-              <img src={image} alt="Uploaded cloud" className="object-cover" />
+              <img src={image} alt="Uploaded cloud" className="objectCover" />
             </div>
             <div className="activeButtonContainer">
               <button className="Button" onClick={() => setImage(null)}>
                 New Photo
               </button>
-              <button className="Button">Identify cloud</button>
+              <button
+                className="cloudLoadButton"
+                onClick={identifyCloud}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <img className="SVG loaderIcon" src={SpinnerSVG} />
+                    Analyzing...
+                  </>
+                ) : (
+                  <>
+                    Identify Cloud
+                    <img className="SVG_RIGHT" src={RightArrowSVG} />
+                  </>
+                )}
+              </button>
             </div>
           </div>
         )}

@@ -66,6 +66,7 @@
 
 .Button:hover {
   background-color: #f0f9ff;
+  cursor: pointer;
 }
 
 .SVG {
@@ -86,4 +87,77 @@
   width: 100%;
   overflow: hidden;
   border-radius: 0.5rem;
+  height: 225px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.activeButtonContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.hiddenInput:hover {
+  cursor: pointer;
+}
+
+.objectCover {
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 200px;
+  width: auto;
+  height: auto;
+}
+
+.cloudLoadButton {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #0c4a6e;
+  transition: background-color 0.3s ease;
+  border: 1px solid #0c4a6e;
+  background-color: #ffffff;
+}
+
+.cloudLoadButton:hover:not(:disabled) {
+  background-color: #f0f9ff;
+  cursor: pointer;
+}
+
+.cloud-btn:disabled {
+  background-color: #38bdf8;
+  cursor: not-allowed;
+}
+
+.loaderIcon {
+  height: 1rem;
+  width: 1rem;
+  margin-right: 0.5rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.SVG_RIGHT {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  margin-left: 0.5rem;
 }
