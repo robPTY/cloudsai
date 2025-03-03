@@ -7,7 +7,9 @@ import UploadSVG from "../assets/svgs/upload.svg";
 import "./BodyCard.css";
 
 const BodyCard = () => {
-  const [image, setImage] = useState<string | null>(null);
+  // Store the base64 string for preview and the file for upload
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [result, setResult] = useState<string | null>(null);
   const [cameraActive, setCameraActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -17,13 +19,13 @@ const BodyCard = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const identifyCloud = async () => {
-    if (!image) return;
+    if (!selectedFile) return;
 
     setIsLoading(true);
 
     try {
       const formData = new FormData();
-      formData.append("image", image);
+      formData.append("image", selectedFile);
       const response = await fetch("http://localhost:5000/api/identify-cloud", {
         method: "POST",
         body: formData,
@@ -45,9 +47,11 @@ const BodyCard = () => {
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const uploaded_file = e.target.files?.[0];
     if (uploaded_file) {
+      setSelectedFile(uploaded_file);
+
       const reader = new FileReader();
       reader.onload = (event) => {
-        setImage(event.target?.result as string);
+        setPreviewImage(event.target?.result as string);
         setResult(null);
       };
       reader.readAsDataURL(uploaded_file);
@@ -85,32 +89,42 @@ const BodyCard = () => {
         <p>Take a photo or upload an image of a cloud to identify it</p>
       </div>
       <div className="cloudReader">
-        {!cameraActive && !image && (
+        {!cameraActive && !previewImage && (
           <div className="defaultReader">
-            <img src={CloudSVG} className="" />
+            <img src={CloudSVG} alt="cloud icon" />
             <p>Upload a cloud image or take a photo</p>
             <div className="buttonStorer">
               <button
                 className="Button"
                 onClick={() => fileInputRef.current?.click()}
               >
-                <img className="SVG" src={UploadSVG} />
+                <img className="SVG" src={UploadSVG} alt="upload icon" />
                 Upload
               </button>
               <button className="Button" onClick={handleMedia}>
-                <img className="SVG" src={CameraSVG} />
+                <img className="SVG" src={CameraSVG} alt="camera icon" />
                 Camera
               </button>
             </div>
           </div>
         )}
-        {image && !cameraActive && (
+        {previewImage && !cameraActive && (
           <div className="imageContainerBody">
             <div className="imageContainer">
-              <img src={image} alt="Uploaded cloud" className="objectCover" />
+              <img
+                src={previewImage}
+                alt="Uploaded cloud"
+                className="objectCover"
+              />
             </div>
             <div className="activeButtonContainer">
-              <button className="Button" onClick={() => setImage(null)}>
+              <button
+                className="Button"
+                onClick={() => {
+                  setPreviewImage(null);
+                  setSelectedFile(null);
+                }}
+              >
                 New Photo
               </button>
               <button
@@ -120,13 +134,21 @@ const BodyCard = () => {
               >
                 {isLoading ? (
                   <>
-                    <img className="SVG loaderIcon" src={SpinnerSVG} />
+                    <img
+                      className="SVG loaderIcon"
+                      src={SpinnerSVG}
+                      alt="loading"
+                    />
                     Analyzing...
                   </>
                 ) : (
                   <>
                     Identify Cloud
-                    <img className="SVG_RIGHT" src={RightArrowSVG} />
+                    <img
+                      className="SVG_RIGHT"
+                      src={RightArrowSVG}
+                      alt="arrow icon"
+                    />
                   </>
                 )}
               </button>
