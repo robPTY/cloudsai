@@ -36,7 +36,7 @@ app.post(
         return res.status(400).json({ error: "No file uploaded" });
       }
 
-      const imageUrl = "http://localhost:5000/uploads/${req.file.filename}`";
+      const imageUrl = "http://localhost:5000/uploads/${req.file.filename}";
 
       const response = await openai.chat.completions.create({
         model: "gpt-4o",
@@ -48,10 +48,16 @@ app.post(
                 type: "text",
                 text: "What types of clouds are visible in this image?",
               },
+              {
+                type: "image_url",
+                image_url: { url: imageUrl },
+              },
             ],
           },
         ],
-        max_tokens: 300,
+        response_format: {
+          type: "text",
+        },
       });
 
       if (!response.choices || response.choices.length === 0) {
